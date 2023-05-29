@@ -29,13 +29,6 @@ export default {
     LandingPage,
     Footer,
   },
-  mounted() {
-    localStorage.setItem("name", "jameel");
-  },
-
-  unmounted() {
-    alert("aaaa");
-  },
 };
 </script>
 <style lang=""></style>

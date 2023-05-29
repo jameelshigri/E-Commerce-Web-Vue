@@ -23,7 +23,7 @@
     <v-app-bar-nav-icon @click="drawer = !drawer"> </v-app-bar-nav-icon>
     <v-toolbar-title>Admin Panel</v-toolbar-title>
     <v-toolbar-item class="mr-15">
-      Logout
+      <v-btn variant="outlined" class="mr-2" @click="logout()">Logout</v-btn>
     </v-toolbar-item>
   </v-app-bar>
 
@@ -67,6 +67,10 @@ export default {
       } else if (component === "ViewAllProduct") {
         this.currentComponent = ViewAllProduct;
       }
+    },
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/");
     },
   },
 };

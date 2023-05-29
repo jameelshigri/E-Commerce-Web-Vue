@@ -38,17 +38,26 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
-    // This route requires authentication
-    // Implement your authentication logic here
-    // For example, check if the user is logged in and has a valid session
-    if (localStorage.getItem("name")) {
-      next(); // Proceed to the requested route
+  const isLoggedIn = () => {
+    if (localStorage.getItem("token")) {
+      console.log("true");
+      return true;
+    }
+    return false;
+  };
+
+  if (to.matched.some((record) => record.meta.requireAuth)) {
+    // Protected route
+    if (isLoggedIn) {
+      // User is logged in, allow access
+      next();
     } else {
-      next("/login"); // Redirect to the login route
+      // User is not logged in, redirect to the landing page
+      next({ name: "Master" });
     }
   } else {
-    next(); // No authentication required, proceed to the requested route
+    // Non-protected route
+    next();
   }
 });
 

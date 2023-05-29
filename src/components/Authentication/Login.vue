@@ -8,26 +8,28 @@
           </v-card-title>
           <v-form fast-fail @submit.prevent="singnin()" class="text-center">
             <v-text-field
-              v-model="user.email"
+              v-model="username"
               label="Email"
               :rules="[rules.required]"
               prepend-icon="mdi-account"
-              hint="Enter valid email"
+              hint="Enter valid username kminchelle"
               variant="solo"
+              autocomplete
               rounded="xl"
             ></v-text-field>
 
             <v-text-field
-              v-model="user.password"
-              :rules="[rules.required, rules.min]"
+              v-model="password"
+              :rules="[rules.required]"
               :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show ? 'text' : 'password'"
               name="input-10-1"
               prepend-icon="mdi-lock"
               label="Password"
-              hint="At least 8 characters"
+              hint="At least 8 characters 0lelplR"
               variant="solo"
               rounded="xl"
+              autocomplete
               @click:append-inner="show = !show"
             ></v-text-field>
 
@@ -53,18 +55,35 @@
   </v-container>
 </template>
 <script>
+import axios from "axios";
 export default {
   data: () => ({
-    user: {
-      email: "",
-      password: "",
-    },
+    username: "",
+    password: "",
+
     show: false,
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
     },
   }),
+  methods: {
+    async singnin() {
+      let res = await axios.post("https://dummyjson.com/auth/login", {
+        username: this.username,
+        password: this.password,
+      });
+      if (res.status === 200) {
+        (this.username = ""), (this.password = "");
+        console.log(res.data);
+        localStorage.setItem("token", res.data.token);
+        this.$router.push({ name: "dash" });
+      } else {
+        alert("User Not found");
+        this.$router.push("/login");
+      }
+    },
+  },
 };
 </script>
 <style scoped>
